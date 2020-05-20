@@ -57,8 +57,6 @@ The APIs that we need to support are:
 
 ## Application
 
-Our application needs to support 10 trillion URLs which means we need a way to generate 10 trillion unique codes. 
-
-
+Our application needs to support 10 trillion URLs which means we need a way to generate 10 trillion unique codes. We can choose base64 encoding to generate unique codes for our URL. An eight character code using base64 encoding would allow us to have 256 trillion (64^8) unique codes.
 
 ## Front End:
