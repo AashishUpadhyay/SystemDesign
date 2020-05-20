@@ -52,10 +52,10 @@ The APIs that we need to support are:
         }
      ```
    
- * xyz.com\{CODE} e.g  `xyz.com\SASD5GHSB9` 
+ * xyz.com\CODE e.g  `xyz.com\SASD5GHSB9` 
    - GET request
    
- * xyz.com\{CODE} e.g  `xyz.com\SASD5GHSB9` 
+ * xyz.com\CODE e.g  `xyz.com\SASD5GHSB9` 
    - DELETE request
 
 ## Application
