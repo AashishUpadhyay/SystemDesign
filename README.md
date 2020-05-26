@@ -94,7 +94,7 @@ Generating Ids on fly have limitations because a lot of the bits were used by th
 * A rangeset cannot be used more than once
 * A node requests for the next rangeset only after it has used all Ids within the current rangeset
 
-![alt text](https://raw.githubusercontent.com/AashishUpadhyay/TinyUrl/c84e850f9416e571af0e389dd2eb4350a3d3390c/TinuUrl_KeyGeneration_Zookeeper.png?token=AB2QIWTZTI3656U3AMRJRSS6ZSHOG)
+![alt text](https://raw.githubusercontent.com/AashishUpadhyay/TinyUrl/master/TinuUrl_KeyGeneration_Zookeeper.png?token=AB2QIWXO764P6ZOLWBNXKUS6ZSIS6)
 
 The zookeeper does not need to keep all ranges, in the beginning we can start with 1000 ranges each of size 1-million.
 
