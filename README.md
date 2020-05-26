@@ -60,13 +60,13 @@ The APIs that we need to support are:
 
 ## Application
 
-The crux of the problem lies in our ability to generate unique Ids for the URLs. Most high level languages support long integers that can be represented using 8 bytes. This allows us to have Id ranging upto 2^64 in our system, this is way bigger than our requirement that is 10 trillion ~ (10 * 2^40)
+The crux of the problem lies in our ability to generate unique Ids for the URLs. Most high level languages support long integers that can be represented using 8 bytes. This allows us to have Ids ranging upto 2^64 in our system, this is way bigger than our requirement i.e. 10 trillion ~ (10 * 2^40)
 
 All tinyurl systems generate a url with an alphanumeric code e.g. `xyz.com\SASD5GHSB9` (why?...IDK). In our system also we can convert the integer value of the the ID to a base64 representation.
 
 Below are some of the approaches to generate unique Ids for the urls that provide a strong non-collision guarantee.
 
-### Generating Id at the node level
+### Generating Ids on fly
 
 Our Id can be formed the way twitter generates ids for its objects, refer [snowflake](https://github.com/twitter-archive/snowflake/tree/snowflake-2010)
 
@@ -82,11 +82,23 @@ Advantages:
 
 Limitations:
 
-1.) Less flexibility w.r.t the nodes where application has to be deployed. If our application doesn't need 1024 nodes then a node will be able to generate just 2^54 Ids. Additionally if we need more nodes (which is unlikely) then a change will be required to the bit allocation.
+Less flexibility w.r.t the nodes where application has to be deployed. If our application doesn't need 1024 nodes then a node will be able to generate just 2^54 Ids. Additionally if we need more nodes (which is unlikely) then a change will be required to the bit allocation.
+
+Generating Ids on fly have limitations because a lot of the bits were used by the timestamp or the machine id. If our application can maintain Ids as a sequence number like we were doing for the last 12 bits in the previous approach, we will not have the issues we dicussed earlier. 
+
+### Generating Ids using Range-sets
+
+* In this approach our application nodes talk to a Service like Zookeeper to generate Ids
+* The Zookeeper acts as a registry for Id rangesets
+* When a node receives a request to generate a URL, it request zookeeper to provide it a rangeset
+* A rangeset cannot be used more than once
+* A node requests for the next rangeset only after it has used all Ids within the current rangeset
+
+
 
 ### Key Generation Service
 
-#### Zookeeper
+Another approach
 
 #### Database 
 
