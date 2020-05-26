@@ -60,6 +60,34 @@ The APIs that we need to support are:
 
 ## Application
 
-Our application needs to support 10 trillion URLs which means we need a way to generate 10 trillion unique codes. We can choose base64 encoding to generate unique codes for our URL. An eight character code using base64 encoding would allow us to have 256 trillion (64^8) unique codes.
+The crux of the problem lies in our ability to generate unique Ids for the URLs. Most high level languages support long integers that can be represented using 8 bytes. This allows us to have Id ranging upto 2^64 in our system, this is way bigger than our requirement that is 10 trillion ~ (10 * 2^40)
+
+All tinyurl systems generate a url with an alphanumeric code e.g. `xyz.com\SASD5GHSB9` (why?...IDK). In our system also we can convert the integer value of the the ID to a base64 representation.
+
+Below are some of the approaches to generate unique Ids for the urls that provide a strong non-collision guarantee.
+
+### Generating Id at the node level
+
+Our Id can be formed the way twitter generates ids for its objects, refer [snowflake](https://github.com/twitter-archive/snowflake/tree/snowflake-2010)
+
+1. time - 41 bits (millisecond precision w/ a custom epoch gives us 69 years)
+2. configured machine id - 10 bits - gives us up to 1024 machines
+3. sequence number - 12 bits - rolls over every 4096 per machine (with protection to avoid rollover in the same ms)
+
+Advantages:
+
+1. Its very fast because there is no network overhead, the key generation logic is within the application 
+2. Collison Free, Scalable
+3. No additional service or database required for keys
+
+Limitations:
+
+1.) Less flexibility w.r.t the nodes where application has to be deployed. If our application doesn't need 1024 nodes then a node will be able to generate just 2^54 Ids. Additionally if we need more nodes (which is unlikely) then a change will be required to the bit allocation.
+
+### Key Generation Service
+
+#### Zookeeper
+
+#### Database 
 
 ## Front End:
