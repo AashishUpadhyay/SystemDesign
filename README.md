@@ -107,7 +107,9 @@ If zookeeper is not an option then these ranges can also be maintained in a rela
 
 ### Generating Ids using Database 
 
-Another option to generate Ids is to use the Identity column in a relational database. All keys can be mainatined in a table. Anytime a request for a key comes, we insert a new row to the table and the generated Id value is returned to the client. This makes our database a a single point of failure. To avoid that we can use two databases to generated unique Ids, one generating odd Ids and the other generating even Ids. This is how Flickr generates uniqueId
+The Ids can alsoe be generated using the Identity column in a relational database. All keys can be mainatined in a table. Anytime a request for a key comes, we insert a new row to the table and the generated Id value is returned to the client. This makes our database a a single point of failure. To avoid that we can use two databases to generated unique Ids, one generating odd Ids and the other generating even Ids. This is how Flickr generates uniqueId
+
+Alternatively we can choose to pregenerate Ids and maintain them in a database, whenever a request comes we can user `SELECT FOR UPDATE` to retrive the Id and marking it as used simultaneously.
 
 As an additional improvement the entire key generation logic can be abstracted in a separate service that the application calls over a HTTP request wheenever it needs an Id
 
@@ -122,6 +124,17 @@ In addition to this we can have screens
 
 All this other front end features are beyond the scope of this post.
 
-## Deployment
+## Caching
+
+The application is read heavy and to avoid load on our database the application can use Caching to prevent read requests from going to the database directly
+
+## CDN
+
+To serve customers in different geographical boundaries we can use Content Delivery networks e.g. Amazon cloudfront, fastly etc. This would improve response times and would help in preventing unscrupulous users from carrying our DOS attacks
+
+## Load Balancing
+
+A load balancer can be used to distribute requests to application servers effectively
+
 
 
