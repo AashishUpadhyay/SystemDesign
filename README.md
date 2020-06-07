@@ -117,12 +117,12 @@ As an additional improvement the entire key generation logic can be abstracted i
 
 Our application needs to provide users an option to provided a long url so that it can be converted to a tiny url. It can be a simple textbox with a submit option. 
 
-In addition to this we can have screens 
+In addition to this we can have screens for
   * sign-up\login
   * subscription details
   * payment-gateway integration etc
 
-All this other front end features are beyond the scope of this post.
+All the other front end features are beyond the scope of this post and therefore will not be discussed more.
 
 ## Caching
 
@@ -130,7 +130,7 @@ The application is read heavy and to avoid load on our database the application 
 
 ## CDN
 
-To serve customers in different geographical boundaries we can use Content Delivery networks e.g. Amazon cloudfront, fastly etc. This would improve response times and would help in preventing unscrupulous users from carrying our DOS attacks
+To serve customers in different geographical boundaries we can use Content Delivery networks e.g. Amazon cloudfront, fastly etc. This would improve response times and would help in preventing unscrupulous users from carrying out DOS attacks
 
 ## Load Balancing
 
