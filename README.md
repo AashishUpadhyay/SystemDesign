@@ -6,7 +6,7 @@ Tiny Url is an application that supports two primary functions
 Like any internet application, a tiny url system comprises of the following main components 
 * database
 * api
-* business 
+* business logic
 * front end
 
 In this post I have tried to come up with a design for various components of a tiny url system using my knowledge in distributed systems.
@@ -62,7 +62,7 @@ The APIs that we need to support are:
 
 The crux of the problem lies in our ability to generate unique Ids for the URLs. Most high level languages support long integers that can be represented using 8 bytes. This allows us to have Ids ranging upto 2^64 in our system, this is way bigger than our requirement i.e. 10 trillion ~ (10 * 2^40)
 
-All tinyurl systems generate a url with an alphanumeric code e.g. `xyz.com\SASD5GHSB9` (why?...IDK). In our system also we can convert the integer value of the the ID to a base64 representation.
+All tinyurl systems generate a url with an alphanumeric code e.g. `xyz.com\SASD5GHSB9` (why?...IDK). The Id generated in the system can be converted to a base64 representation if our application is allowed to have alphanumeric code of arbitrary length. 
 
 Below are some of the approaches to generate unique Ids for the urls that provide a strong non-collision guarantee.
 
@@ -79,10 +79,15 @@ Advantages:
 1. Its very fast because there is no network overhead, the key generation logic is within the application 
 2. Collison Free, Scalable
 3. No additional service or database required for keys
+4. Using bits to form an Id also allows us to have tiny url alphanumeric code to be of fixed length, although the total number of URLs that can be supported wiil be only 2^42 now. For example instead of 64 bits we can use 43 bits to genrated a 7 character long alphanumeric code. Here is how we can use bits:
+
+  * 31 bits for the timestamp (second precision w/ a custom epoch gives us 69 years)
+  * configured machine id - 6 bits - gives us up to have 64 machines
+  * sequence number - 5 bits - rolls over every 32 per machine (with protection to avoid rollover in the same second)
 
 Limitations:
 
-Less flexibility w.r.t the nodes where application has to be deployed. If our application doesn't need 1024 nodes then a node will be able to generate just 2^54 Ids. Additionally if we need more nodes (which is unlikely) then a change will be required to the bit allocation.
+Less flexibility w.r.t the nodes where application has to be deployed, if we need more nodes then a change will be required to the bit allocation.
 
 Generating Ids on fly have limitations because a lot of the bits were used by the timestamp or the machine id. If our application can maintain Ids as a sequence number like we were doing for the last 12 bits in the previous approach, we will not have the issues we dicussed earlier. 
 
@@ -100,8 +105,23 @@ The zookeeper does not need to keep all ranges, in the beginning we can start wi
 
 If zookeeper is not an option then these ranges can also be maintained in a relational database. Whenever required an application node can get a range from the database and use it to generate a million Ids and then retrieve the next one.   
 
-### Key Generation Service
+### Generating Ids using Database 
 
-#### Database 
+Another option to generate Ids is to use the Identity column in a relational database. All keys can be mainatined in a table. Anytime a request for a key comes, we insert a new row to the table and the generated Id value is returned to the client. This makes our database a a single point of failure. To avoid that we can use two databases to generated unique Ids, one generating odd Ids and the other generating even Ids. This is how Flickr generates uniqueId
+
+As an additional improvement the entire key generation logic can be abstracted in a separate service that the application calls over a HTTP request wheenever it needs an Id
 
 ## Front End:
+
+Our application needs to provide users an option to provided a long url so that it can be converted to a tiny url. It can be a simple textbox with a submit option. 
+
+In addition to this we can have screens 
+  * sign-up\login
+  * subscription details
+  * payment-gateway integration etc
+
+All this other front end features are beyond the scope of this post.
+
+## Deployment
+
+
