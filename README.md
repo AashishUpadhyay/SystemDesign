@@ -12,7 +12,7 @@ Like any internet application, a tiny url system comprises of the following main
 In this post I have tried to come up with a design for various components of a tiny url system using my knowledge in distributed systems.
 
 ## Requirements
-Before we begin it is important to assess the scale requirement of our application. A lot of our design choices will depend on the scalability of our Application.
+Before we begin it is important to assess the scale requirements of our application. A lot of our design choices will depend on the scalability of our Application.
 
 Lets assume that our application needs to support 10 trillion URLs. This is a decent number to start designing out application given there are approximately 1.5 billion websites all over the internet.
 
@@ -107,7 +107,7 @@ If zookeeper is not an option then these ranges can also be maintained in a rela
 
 ### Generating Ids using Database 
 
-The Ids can alsoe be generated using the Identity column in a relational database. All keys can be mainatined in a table. Anytime a request for a key comes, we insert a new row to the table and the generated Id value is returned to the client. This makes our database a a single point of failure. To avoid that we can use two databases to generated unique Ids, one generating odd Ids and the other generating even Ids. This is how Flickr generates uniqueId
+The Ids can also be generated using the Identity column in a relational database. All keys can be mainatined in a table. Anytime a request for a key comes, we insert a new row to the table and the generated Id value is returned to the client. This makes our database a a single point of failure. To avoid that we can use two databases to generated unique Ids, one generating odd Ids and the other generating even Ids. This is how Flickr generates uniqueId
 
 Alternatively we can choose to pregenerate Ids and maintain them in a database, whenever a request comes we can user `SELECT FOR UPDATE` to retrive the Id and marking it as used simultaneously.
 
