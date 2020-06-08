@@ -79,11 +79,11 @@ Advantages:
 1. Its very fast because there is no network overhead, the key generation logic is within the application 
 2. Collison Free, Scalable
 3. No additional service or database required for keys
-4. Using bits to form an Id also allows us to have tiny url alphanumeric code to be of fixed length, although the total number of URLs that can be supported wiil be only 2^42 now. For example instead of 64 bits we can use 43 bits to genrated a 7 character long alphanumeric code. Here is how we can use bits:
+4. Using bits to form an Id also allows us to have tiny url alphanumeric code to be of fixed length, although the total number of URLs that can be supported wiil be only 2^42 now. For example instead of 64 bits we can use 43 bits to genrated a 7 character long alphanumeric code. Here is how the bit allocation can be done for a 7 character code:
 
-  * 31 bits for the timestamp (second precision w/ a custom epoch gives us 69 years)
-  * configured machine id - 6 bits - gives us up to have 64 machines
-  * sequence number - 5 bits - rolls over every 32 per machine (with protection to avoid rollover in the same second)
+    * 31 bits for the timestamp (second precision w/ a custom epoch gives us 69 years)
+    * configured machine id - 6 bits - gives us up to have 64 machines
+    * sequence number - 5 bits - rolls over every 32 per machine (with protection to avoid rollover in the same second)
 
 Limitations:
 
