@@ -27,6 +27,8 @@ The embedded links that the crawler extracts from a given page are fed to a serv
 - We can use a system like zookeeper to provision one or more crawlers for one or more langauges
 - The crawler services will initially have to be provided some seed links during bootstrapping, there onwards it will use the service broker to manage pages that need to be processed
 - Before processing a page the crawler service should check if the hash code for the page is present in the cache or not. If the code is present it should not process the page again
+- RSS feeds can be used to add new pages or update existing ones
+- To avoid blacklisting our crawlers services should honor the request limits of the the API. Some recommended practices are avoiding too many requests in parallel. If the API supports it should try and read multiple pages at once
 
 ### Database
 
