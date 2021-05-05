@@ -1,5 +1,5 @@
 # System Design Problems
 
-| Name       |
-| ---------- |
-| [Tiny Url] |
+| Name                          |
+| ----------------------------- |
+| [Tiny Url](TinyUrl/README.md) |
