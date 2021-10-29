@@ -7,8 +7,61 @@
 
   Example of violation of liskov substitution principle: In mathematics, a Square is a Rectangle. Indeed it is a specialization of a rectangle. The "is a" makes you want to model this with inheritance. However if in code you made Square derive from Rectangle, then a Square should be usable anywhere you expect a Rectangle. This makes for some strange behavior.
 
-  Imagine you had SetWidth and SetHeight methods on your Rectangle base class; this seems perfectly logical. However if your Rectangle reference pointed to a Square, then SetWidth and SetHeight doesn't make sense because setting one would change the other to match it. In this case Square fails the Liskov Substitution Test with Rectangle and the abstraction of having Square inherit from Rectangle is a bad one.
+  Imagine you had SetWidth and SetHeight methods on your Rectangle base class; this seems perfectly logical. However if your Rectangle reference pointed to a Square, then SetWidth and SetHeight doesn't make sense because setting one would change the other to match it. In this case Square fails the Liskov Substitution Test with Rectangle and the abstraction of having Square inherit from Rectangle is a bad one. Here is why:
+  
+  Example from [How to verify the Liskov substitution principle in an inheritance hierarchy?](https://softwareengineering.stackexchange.com/questions/170189/how-to-verify-the-liskov-substitution-principle-in-an-inheritance-hierarchy/170191#170191)
+  
+  
+  For example originally :
+  
+  ```
+  public class Square : Rectangle
+  {
+      public Square(double width) : base(width, width)
+      {
+      }
 
+      public override double Width
+      {
+          set
+          {
+              base.Width = value;
+              base.Height = value;
+          }
+          get
+          {
+              return base.Width;
+          }
+      }
+
+      public override double Height
+      {
+          set
+          {
+              base.Width = value;
+              base.Height = value;
+          }
+          get
+          {
+              return base.Height;
+          }
+      }
+  }
+  ```
+  
+    Seems fair enough, right? I've created a specialist kind of Rectangle called Square, which maintains that Width must equal Height at all times. A square is a rectangle, so it fits with OO principles, doesn't it?
+
+    But wait, what if someone now writes this method (notice how this will reduce the width and height twice):
+    
+    ```
+    public void Enlarge(Rectangle rect, double factor)
+    {
+        rect.Width *= factor;
+        rect.Height *= factor;
+    }
+    ```
+
+Liskov Substitution Principle requires that
   - Preconditions cannot be strengthened in a subtype.
   - Postconditions cannot be weakened in a subtype.
   - Invariants of the supertype must be preserved in a subtype.
