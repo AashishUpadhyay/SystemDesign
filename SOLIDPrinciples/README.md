@@ -14,7 +14,7 @@
   - Invariants of the supertype must be preserved in a subtype.
   - History constraint (the "history rule"). Objects are regarded as being modifiable only through their methods (encapsulation). Since subtypes may introduce methods that are not present in the supertype, the introduction of these methods may allow state changes in the subtype that are not permissible in the supertype. The history constraint prohibits this.
 
-  Violation Example: 
+  Violation Example: This example breaks the first principle
   ```
     public class Task
     {
