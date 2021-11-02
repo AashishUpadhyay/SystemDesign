@@ -62,6 +62,7 @@ The APIs that we will probably need are:
   - The payload consists of the from_user and to_user information. This information will be used to determine the node where the relevant data resides
   - The system will initiate the transaction by creating a debit transaction record for from_user. This will be followed by a credit transaction record for to_user.
   - The system uses 2PC using a service like DTC to coordinate transactions between two partitions
+  - **TODO**: Sagas pattern for eventual consistency improves availability
 
 - Balance:
   - The balance at any point shows the total amount user has in his account. This is a sum total of all valid transactions
@@ -72,11 +73,13 @@ The APIs that we will probably need are:
   - A routing service allows Application layer to determine the node where the user data resides.
   - The User Data can be partitioned based on user names for e.g. using the first letter of the username will allow us to partition user data across 26 nodes.
   - The partition range and node mapping can be maintained in a coordination service like zookeper
-  - TODO: Describe partition strategy
+  - **TODO**: Describe partition strategy
 
 
 ## Bottlenecks and Scale
 
 - Routing Tier can act as a single point of failure
-- Distributed transaction can bring down the performance of the system (alternate schemes for consitency)
+- 2PC bottlenecks
+  - cordinator service acts as a single point of failure
+  - reduced throughput 
 - Using the partition strategy described above seems a bit of an overengineering when applied from day one 
