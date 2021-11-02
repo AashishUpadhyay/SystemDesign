@@ -4,7 +4,7 @@
   - Feature: Allows transfer of cash seamlessly between one another
   - Scale: Scalable to support upto 10 biliion users across the world
   - Conditions: Database Consistency
-    - No transaction errors
+    - No erroneous transactions
 
 Questions: Can transfers me made outside the country? (Government rules prohibit this)
 
