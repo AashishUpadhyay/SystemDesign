@@ -72,6 +72,7 @@ The APIs that we will probably need are:
   - A routing service allows Application layer to determine the node where the user data resides.
   - The User Data can be partitioned based on user names for e.g. using the first letter of the username will allow us to partition user data across 26 nodes.
   - The partition range and node mapping can be maintained in a coordination service like zookeper
+  - TODO: Describe partition strategy
 
 
 ## Bottlenecks and Scale
