@@ -95,9 +95,8 @@
       txn_detail_id, txn_id, amount, credit entry, user id, user
 
 - Stocks Management:
-  - Manages stock data. A search index that maintains time series data
-  - We also need to manage a list of stocks that have been added into the watchlists. A different index
-  - The feed received from the Exchange needs to be analysed and if the feed contains tickers that are in watchlists, we need to update the watchlists and evalaute if notifications have to be sent
+  - Manages stock data. A key value database that manages timeseries data for each stock
+  - We also need to manage a list of stocks that have been added into the watchlists
 - Notifications Service: Responsible for sending notifications to the user.
 - Reporting Service: This service runs as a batch processing unit and is reponsible for the following:
   - User portfolio Calculation
@@ -113,7 +112,6 @@
 - The writes will always be performed in the Primary database and the reads will be from Secondary database.
 - User Management Service will also issue tokens that will be used to execute operations in other services such as order submission, report generation, view transactions etc
 - Users information such as Portfolio Update and watch lists will be maintained in a Cache.
-- Watchlists will be fetched from the Search Index for the stocks
 - It supports the following APIs:
   - Add user POST `usermanagement.api.com\user`
   - Update portfolio POST `usermanagement.api.com\user\portfolio`
@@ -191,8 +189,12 @@
 ## Stock Management Service:
 
 - Stock management service maintains the data feeds received from exchange
-- The service maintains the data in a search index
-- The index is a time series data
+- The service maintains the data in a relational database. The records are indexed based on timestamp
+- The database can be partitioned based on timestamp.
+  - The feed receieved from the exchange in a single day is always maintained in afresh new table
+  - Everynight all data received in the given day is archived and stored in a new table that keeps records of the data received in a month
+  - Everymonth once all the data received in for the given month is archived and stored in a new table that keeps records of stock data received in a year
+- The latest information received for the stock is maintained in the cache
 - More instances of the service can be added to handle additional scale
 
 ## Stocks alerats
