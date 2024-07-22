@@ -113,6 +113,7 @@
 - The writes will always be performed in the Primary database and the reads will be from Secondary database.
 - User Management Service will also issue tokens that will be used to execute operations in other services such as order submission, report generation, view transactions etc
 - Users information such as Portfolio Update and watch lists will be maintained in a Cache.
+- Watchlists will be fetched from the Search Index for the stocks
 - It supports the following APIs:
   - Add user POST `usermanagement.api.com\user`
   - Update portfolio POST `usermanagement.api.com\user\portfolio`
@@ -177,6 +178,7 @@
   - How multiple nodes be handled when the data is maintained in-memory?
   - How data co-ordination happens between in-memory data strcuture and the underlying database?
 - Problem Description: I have a service that maintains an inmemory data strcuture or orders. To scale horizontally more instance of service can be added and the orders will be divided between those instances based on order id using hashing. Hash function would be like (order_id/no of nodes). What options can be employed to handle node failures?
+  - Consistent Hashing
 
 ## Order Processing Service:
 
@@ -185,3 +187,24 @@
   - Orders to process: Records submitted to the topic are submitted to the excchange for execution
   - Orders processed: Records submitted to the topic are updated in the order management service for marking them as complete or cancellation
 - During peak hours more nodes can be added to handle the increased load in the number of orders to be processed
+
+## Stock Management Service:
+
+- Stock management service maintains the data feeds received from exchange
+- The service maintains the data in a search index
+- The index is a time series data
+- More instances of the service can be added to handle additional scale
+
+## Stocks alerats
+
+- A service that maintains a list of ticks and events registered
+- Watches feeds from the exchange and evaluate events on those feeds and sends notifications. Critical stock movements are prioritiseed.
+
+## Notification Service:
+
+- Notification service sends notification to users when a stock alert is generated.
+- Exponential back-off when system is unable to send notification
+
+## Reporting Service
+
+- A service that generates reports for the user
